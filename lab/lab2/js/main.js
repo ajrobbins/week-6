@@ -124,10 +124,19 @@ of the application to report this information.
 ===================== */
 
 var dataset = "https://raw.githubusercontent.com/CPLN692-MUSA611/datasets/master/geojson/philadelphia-garbage-collection-boundaries.geojson"
+
 var featureGroup;
 
 var myStyle = function(feature) {
-  return {};
+  switch (feature.properties.COLLDAY) {
+    case 'FRI': return {color: "#009900"};
+    case 'SAT': return {color: "#660066"};
+    case 'THU': return {color: "#6600cc"};
+    case 'MON': return {color: "#cc0000"};
+    case 'TUE': return {color: "#ff9900"};
+    case 'WED': return {color: "#669999"};
+    default: return {color: "000000"};
+  }
 };
 
 var showResults = function() {
@@ -143,7 +152,16 @@ var showResults = function() {
   $('#results').show();
 };
 
-
+var fullDay = function (txt) {
+  switch (txt) {
+    case 'FRI': return "FRIDAY";
+    case 'SAT': return "SATURDAY";
+    case 'THU': return "THURSDAY";
+    case 'MON': return "MONDAY";
+    case 'TUE': return "TUESDAY";
+    case 'WED': return "WEDNESDAY";
+  }
+};
 var eachFeatureFunction = function(layer) {
   layer.on('click', function (event) {
     /* =====================
@@ -152,17 +170,25 @@ var eachFeatureFunction = function(layer) {
     you can use in your application.
     ===================== */
     console.log(layer.feature);
+    var day =layer.feature.properties.COLLDAY;
+    console.log(day);
+    $(".day-of-week").text(fullDay(day)); //display day of week on layer click and convert to full day name
     showResults();
   });
 };
 
 var myFilter = function(feature) {
-  return true;
+  if (feature.properties.COLLDAY != ' ') {
+    return true;
+  }
 };
 
+var myData;
 $(document).ready(function() {
   $.ajax(dataset).done(function(data) {
     var parsedData = JSON.parse(data);
+    myData = parsedData;
+    myFeatures = myData.features;
     featureGroup = L.geoJson(parsedData, {
       style: myStyle,
       filter: myFilter
