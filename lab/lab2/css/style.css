@@ -29,6 +29,26 @@ p.main {
 
 .legend {
   position: absolute;
+  right: 20px;
+  bottom: 20px;
+  left: 85%;
+  border: 2px solid black;
+  padding: 5px;
   background-color: #fff;
   z-index: 2000;
+  line-height: 2px;
+}
+
+.legend-label {
+  display: inline-block;
+  line-height: 0px;
+}
+.color-box {
+    width: 10px;
+    height: 10px;
+    display: inline-block;
+    background-color: ;
+    position: relative;
+    left: 10px;
+    line-height: 0px;
 }
